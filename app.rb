@@ -17,3 +17,8 @@ end
 configure :development do
   enable :logging
 end
+
+configure :production do
+  set :host, "to-love-roo-2.herokuapp.com"
+  set :force_ssl, true
+end
