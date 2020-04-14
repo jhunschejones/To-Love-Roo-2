@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>To Love Roo : Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="/site.css">
+  </head>
+  <body>
+    <section class="section">
+      <div id="app" class="container">
+        <button class="is-pulled-right button is-danger is-small" v-on:click="logOut">Logout</button>
+
+        <h1 class="title">
+          To Love Roo : Home
+        </h1>
+        <p class="subtitle">
+          The home page
+        </p>
+
+        <div class="container-fluid">
+          <article class="message is-link">
+            <div class="message-header">
+              <p v-cloak>A message for {{ note.recipientName }}:</p>
+            </div>
+            <div class="message-body">
+              <p v-cloak>{{ note.text }}</p>
+            </div>
+          </article>
+
+          <div id="note-controls" class="text-secondary">
+            <span v-if="(!note.order || note.order > 0)" v-on:click="previousNote" class="tag is-warning">Previous</span>
+            <span v-on:click="randomNote" class="tag is-warning">Random</span>
+            <span v-on:click="getNote" class="tag is-warning">Newest</span>
+          </div>
+
+          <br/><br/><br/>
+
+          <div class="field">
+            <label class="label">New note:</label>
+            <div class="control">
+              <textarea v-model="newNote" name="newNote" placeholder="New note here..." class="textarea" rows="5"></textarea>
+            </div>
+            <small class="has-text-grey-light is-pulled-right" v-cloak>Characters remaining: {{ 500 - newNote.length }}</small>
+            <div class="field">
+              <div class="control">
+                <button type="submit" class="button is-link" v-on:click="addNote">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script defer src="/site.js"></script>
+  </body>
+</html>

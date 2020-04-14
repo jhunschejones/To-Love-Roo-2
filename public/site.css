@@ -1,0 +1,6 @@
+[v-cloak] { display: none }
+
+.tag {
+  cursor: pointer;
+  user-select: none;
+}
