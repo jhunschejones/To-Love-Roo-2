@@ -25,10 +25,13 @@ GEM
     minitest (5.14.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nio4r (2.5.2)
     pg (1.2.3)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    puma (4.3.3)
+      nio4r (~> 2.0)
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
@@ -61,6 +64,7 @@ DEPENDENCIES
   bcrypt
   pg
   pry
+  puma
   rake
   rerun
   sinatra

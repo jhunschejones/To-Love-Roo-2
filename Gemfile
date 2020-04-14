@@ -7,6 +7,7 @@ gem "activerecord"
 gem "sinatra-activerecord"
 gem 'bcrypt'
 gem 'pg'
+gem 'puma'
 
 group :development do
   gem 'pry'
