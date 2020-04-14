@@ -5,6 +5,8 @@ class NotesController < Sinatra::Base
 
   get '/' do
     authenticated do
+      @current_user = User.find(session[:user_id])
+      @other_user = @current_user.other_user
       erb :home
     end
   end
@@ -54,7 +56,7 @@ class NotesController < Sinatra::Base
       note = Note.create(
         text: request_payload[:text],
         creator_id: session[:user_id],
-        recipient_id: session[:user_id] == "1" ? "2" : "1", # there are only 2 users
+        recipient_id: User.find(session[:user_id]).other_user.id,
       )
 
       content_type :json

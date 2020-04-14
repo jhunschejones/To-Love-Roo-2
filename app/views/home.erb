@@ -37,18 +37,20 @@
 
           <br/><br/><br/>
 
-          <div class="field">
-            <label class="label">New note:</label>
-            <div class="control">
-              <textarea v-model="newNote" name="newNote" placeholder="New note here..." class="textarea" rows="5"></textarea>
-            </div>
-            <small class="has-text-grey-light is-pulled-right" v-cloak>Characters remaining: {{ 500 - newNote.length }}</small>
+          <% if @current_user.is_joshua? %>
             <div class="field">
+              <label class="label">New note to <%= @other_user.name %>:</label>
               <div class="control">
-                <button type="submit" class="button is-link" v-on:click="addNote">Submit</button>
+                <textarea v-model="newNote" name="newNote" placeholder="New note here..." class="textarea" rows="5"></textarea>
+              </div>
+              <small class="has-text-grey-light is-pulled-right" v-cloak>Characters remaining: {{ 500 - newNote.length }}</small>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-link" v-on:click="addNote">Submit</button>
+                </div>
               </div>
             </div>
-          </div>
+          <% end %>
         </div>
       </div>
     </section>
