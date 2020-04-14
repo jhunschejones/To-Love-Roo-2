@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_14_032439) do
+ActiveRecord::Schema.define(version: 2020_04_14_071233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "notes", force: :cascade do |t|
-    t.string "text", null: false
+    t.text "text", null: false
     t.string "creator_id", null: false
     t.string "recipient_id", null: false
     t.datetime "created_at", precision: 6, null: false
