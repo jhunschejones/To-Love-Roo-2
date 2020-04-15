@@ -52,6 +52,7 @@ class NotesController < Sinatra::Base
     authenticated do
       request.body.rewind
       request_payload = JSON.parse(request.body.read, symbolize_names: true)
+      halt 400 if request_payload[:text].length == 0
 
       note = Note.create(
         text: request_payload[:text],
