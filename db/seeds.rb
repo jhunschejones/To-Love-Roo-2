@@ -1,9 +1,9 @@
-if User.where(email: ENV["ROO_EMAIL"]).size == 0
-  User.create(name: "Roo", email: ENV["ROO_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
-end
-
 if User.where(email: ENV["JOSHUA_EMAIL"]).size == 0
   User.create(name: "Joshua", email: ENV["JOSHUA_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
+end
+
+if User.where(email: ENV["ROO_EMAIL"]).size == 0
+  User.create(name: "Roo", email: ENV["ROO_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
 end
 
 joshua = User.where(email: ENV["JOSHUA_EMAIL"]).first
