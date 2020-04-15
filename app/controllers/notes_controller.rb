@@ -1,6 +1,4 @@
-require 'sinatra/base'
-
-class NotesController < Sinatra::Base
+class NotesController < ApplicationController
   set :views, File.expand_path('../../views/', __FILE__)
 
   get '/' do
@@ -51,14 +49,6 @@ class NotesController < Sinatra::Base
           recipient_id: User.find(session[:user_id]).other_user.id,
         )
       ).as_json
-    end
-  end
-
-  def authenticated
-    if session[:user_id]
-      yield
-    else
-      redirect '/sessions/login'
     end
   end
 end

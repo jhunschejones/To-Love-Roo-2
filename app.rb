@@ -4,6 +4,7 @@ require_relative "./config/environments"
 require_relative "./app/models/user"
 require_relative "./app/models/note"
 require_relative "./app/serializers/note_serializer"
+require_relative "./app/controllers/application_controller"
 require_relative "./app/controllers/sessions_controller"
 require_relative "./app/controllers/notes_controller"
 

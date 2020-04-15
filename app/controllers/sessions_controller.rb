@@ -1,6 +1,4 @@
-require 'sinatra/base'
-
-class SessionsController < Sinatra::Base
+class SessionsController < ApplicationController
   ALERTS = { 'auth' => 'Username or password was incorrect' }
   set :views, File.expand_path('../../views/sessions', __FILE__)
 
