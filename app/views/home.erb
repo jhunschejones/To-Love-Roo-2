@@ -37,7 +37,7 @@
 
           <br/><br/><br/>
 
-          <% if @current_user.is_joshua? %>
+          <% if @current_user.is_joshua? && @other_user %>
             <div class="field">
               <label class="label">New note to <%= @other_user.name %>:</label>
               <div class="control">

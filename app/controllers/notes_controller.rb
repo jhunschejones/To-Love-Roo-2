@@ -11,22 +11,16 @@ class NotesController < Sinatra::Base
     end
   end
 
-  # supporting ?query=latest and ?query=random
   get '/notes' do
     authenticated do
-      if params["query"] == "latest"
-        note = Note.last
-      else
-        note = Note.order(Arel.sql('RANDOM()')).first
-      end
-
       content_type :json
-      {
-        id: note.id,
-        text: note.text,
-        creatorName: User.find(note.creator_id).name,
-        recipientName: User.find(note.recipient_id).name,
-      }.to_json
+      if params["query"] == "latest"
+        NoteSerializer.new(Note.last).as_json
+      elsif params["query"] == "random"
+        NoteSerializer.new(Note.random).as_json
+      else
+        Note.all.map { |note| NoteSerializer.new(note).serializable_hash }.to_json
+      end
     end
   end
 
@@ -36,12 +30,7 @@ class NotesController < Sinatra::Base
 
       content_type :json
       if note
-        {
-          id: note.id,
-          text: note.text,
-          creatorName: User.find(note.creator_id).name,
-          recipientName: User.find(note.recipient_id).name,
-        }.to_json
+        NoteSerializer.new(note).as_json
       else
         { error: { message: "There are no more notes." } }.to_json
       end
@@ -54,19 +43,14 @@ class NotesController < Sinatra::Base
       request_payload = JSON.parse(request.body.read, symbolize_names: true)
       halt 400 if request_payload[:text].length == 0
 
-      note = Note.create(
-        text: request_payload[:text],
-        creator_id: session[:user_id],
-        recipient_id: User.find(session[:user_id]).other_user.id,
-      )
-
       content_type :json
-      {
-        id: note.id,
-        text: note.text,
-        creatorName: User.find(note.creator_id).name,
-        recipientName: User.find(note.recipient_id).name,
-      }.to_json
+      NoteSerializer.new(
+        Note.create(
+          text: request_payload[:text],
+          creator_id: session[:user_id],
+          recipient_id: User.find(session[:user_id]).other_user.id,
+        )
+      ).as_json
     end
   end
 

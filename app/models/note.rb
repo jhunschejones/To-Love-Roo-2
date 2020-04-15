@@ -10,4 +10,8 @@ class Note < ActiveRecord::Base
   def self.previous(id)
     self.where("id < ?", id).last
   end
+
+  def self.random
+    self.order(Arel.sql('RANDOM()')).first
+  end
 end
