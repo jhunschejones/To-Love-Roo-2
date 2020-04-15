@@ -6,8 +6,7 @@ var app = new Vue({
     sender: ""
   },
   methods: {
-    addNote: function(event) {
-      console.log(this.newNote)
+    addNote: async function() {
       fetch("/notes",
         {
           method: "POST",
@@ -17,9 +16,10 @@ var app = new Vue({
             text: this.newNote.trim()
           })
         }
-      ).then(function() {
+      ).then(async function(data) {
+        data = await data.json();
         app.newNote = "";
-        app.getNote();
+        app.note = data;
       })
     },
     getNote: async function() {
