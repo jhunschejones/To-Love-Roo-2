@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>To Love Roo : Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="/site.css">
   </head>
   <body>
   <section class="section">
@@ -16,6 +16,13 @@
       <p class="subtitle">
         The login page
       </p>
+
+      <div class="flash">
+        <% if @flash && @flash[:alert] %>
+          <div class="notification is-danger"><%= @flash[:alert] %></div>
+          <script>window.history.pushState("", "", '/sessions/login'); // clear flash query param from url </script>
+        <% end %>
+      </div>
 
       <div class="login-form">
         <form action="/sessions/login" method="post">

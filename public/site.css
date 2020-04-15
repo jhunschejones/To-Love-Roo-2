@@ -4,3 +4,7 @@
   cursor: pointer;
   user-select: none;
 }
+
+.notification {
+  margin-bottom: 20px;
+}

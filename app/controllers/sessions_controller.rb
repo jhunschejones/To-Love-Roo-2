@@ -1,12 +1,14 @@
 require 'sinatra/base'
 
 class SessionsController < Sinatra::Base
+  ALERTS = { 'auth' => 'Username or password was incorrect' }
   set :views, File.expand_path('../../views/sessions', __FILE__)
 
   get '/sessions/login' do
     if session[:user_id]
       redirect '/'
     else
+      @flash = { alert: ALERTS[params[:alert]] }
       erb :login
     end
   end
@@ -18,8 +20,7 @@ class SessionsController < Sinatra::Base
       session[:user_id] = user.id.to_s
       redirect '/'
     else
-      @error = 'Username or password was incorrect'
-      erb :login
+      redirect '/sessions/login?alert=auth'
     end
   end
 
