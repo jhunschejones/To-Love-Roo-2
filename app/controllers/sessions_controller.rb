@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
-  ALERTS = { 'auth' => 'Username or password was incorrect' }
   set :views, File.expand_path('../../views/sessions', __FILE__)
+
+  ALERTS = { 'auth' => 'Username or password was incorrect' }
 
   get '/sessions/login' do
     if session[:user_id]

@@ -1,16 +1,10 @@
-require 'sinatra/base'
-
 class ApplicationController < Sinatra::Base
   before do
     redirect request.url.sub('http', 'https') if requires_https?
   end
 
-  def authenticated
-    if session[:user_id]
-      yield
-    else
-      redirect '/sessions/login'
-    end
+  def authenticate
+    redirect '/sessions/login' unless session[:user_id]
   end
 
   private
