@@ -33,26 +33,36 @@ def session
 end
 
 def login_user
-  User.create(name: "test user", email: ENV["JOSHUA_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
+  User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["JOSHUA_EMAIL"])
   post '/sessions/login', {email: ENV["JOSHUA_EMAIL"], password: ENV["DEV_PASSWORD"]}
 end
 
-def create_first_note
-  User.create(name: "test user", email: ENV["JOSHUA_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
-  User.create(name: "test user", email: ENV["ROO_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
+def create_one_note
+  joshua = User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["JOSHUA_EMAIL"])
+  roo = User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["ROO_EMAIL"])
   Note.create(
     text: "The first note",
-    recipient_id: User.where(email: ENV["ROO_EMAIL"]).first.id,
-    creator_id: User.where(email: ENV["JOSHUA_EMAIL"]).first.id
+    recipient_id: joshua.id,
+    creator_id: roo.id
   )
 end
 
-def create_second_note
-  User.create(name: "test user", email: ENV["JOSHUA_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
-  User.create(name: "test user", email: ENV["ROO_EMAIL"], password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"])
+def create_two_notes
+  joshua = User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["JOSHUA_EMAIL"])
+  roo = User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["ROO_EMAIL"])
+  Note.create(
+    text: "The first note",
+    recipient_id: joshua.id,
+    creator_id: roo.id
+  )
   Note.create(
     text: "The second note",
-    recipient_id: User.where(email: ENV["ROO_EMAIL"]).first.id,
-    creator_id: User.where(email: ENV["JOSHUA_EMAIL"]).first.id
+    recipient_id: joshua.id,
+    creator_id: roo.id
   )
+end
+
+def create_two_users
+  User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["JOSHUA_EMAIL"])
+  User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["ROO_EMAIL"])
 end

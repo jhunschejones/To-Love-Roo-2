@@ -36,8 +36,7 @@ describe NotesController do
     context "when a user is logged in" do
       before do
         login_user
-        create_first_note
-        create_second_note
+        create_two_notes
       end
 
       context "with no params" do
@@ -85,11 +84,11 @@ describe NotesController do
   end
 
   describe "GET /notes/:id/previous" do
-    before do
-      create_first_note
-    end
-
     context "when no user is logged in" do
+      before do
+        create_one_note
+      end
+
       it "redirects for login" do
         get "notes/#{Note.last.id}/previous"
         expect(last_response).to be_redirect
@@ -104,7 +103,7 @@ describe NotesController do
 
       context "when there is a previous note" do
         before do
-          create_second_note
+          create_two_notes
           get "notes/#{Note.last.id}/previous"
         end
 
@@ -119,6 +118,7 @@ describe NotesController do
 
       context "when there is no previous note" do
         before do
+          create_one_note
           get "notes/#{Note.first.id}/previous"
         end
 
@@ -135,8 +135,7 @@ describe NotesController do
 
   describe "POST /notes" do
     before do
-      create_first_note
-      create_second_note
+      create_two_users
     end
 
     context "when no user is logged in" do
