@@ -1,7 +1,7 @@
 require "sinatra"
 require "sinatra/activerecord"
 require_relative "./config/environments"
-Dir["#{File.dirname(__FILE__)}/app/**/*.rb"].each { |f| require(f) }
+Dir["#{File.dirname(__FILE__)}/app/**/*.rb"].each { |f| require_relative(f) }
 
 use SessionsController
 use NotesController
