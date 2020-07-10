@@ -4,7 +4,8 @@ class ApplicationController < Sinatra::Base
   end
 
   def authenticate
-    redirect '/sessions/login' unless session[:user_id]
+    @current_user = User.find_by(id: session[:user_id])
+    redirect '/sessions/login' unless @current_user
   end
 
   private

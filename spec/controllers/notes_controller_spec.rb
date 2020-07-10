@@ -96,7 +96,7 @@ describe NotesController do
       end
     end
 
-    context "when a user is logged in" do
+    context "when admin is logged in" do
       before do
         login_user_joshua
       end
@@ -133,6 +133,56 @@ describe NotesController do
     end
   end
 
+  describe "GET /notes/:id/next" do
+    context "when no user is logged in" do
+      before do
+        create_one_note
+      end
+
+      it "redirects for login" do
+        get "notes/#{Note.first.id}/next"
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/sessions/login")
+      end
+    end
+
+    context "when admin is logged in" do
+      before do
+        login_user_joshua
+      end
+
+      context "when there is a next note" do
+        before do
+          create_two_notes
+          get "notes/#{Note.first.id}/next"
+        end
+
+        it "returns json" do
+          expect(last_response.headers.first).to eq(["Content-Type", "application/json"])
+        end
+
+        it "returns the previous note" do
+          expect(JSON.parse(last_response.body)["id"]).to eq(Note.all[1].id)
+        end
+      end
+
+      context "when there is no next note" do
+        before do
+          create_one_note
+          get "notes/#{Note.last.id}/next"
+        end
+
+        it "returns json" do
+          expect(last_response.headers.first).to eq(["Content-Type", "application/json"])
+        end
+
+        it "returns an error message" do
+          expect(JSON.parse(last_response.body)["error"]["message"]).to eq("There are no more notes.")
+        end
+      end
+    end
+  end
+
   describe "GET /notes/:id/edit" do
     before do
       create_two_notes
@@ -146,7 +196,7 @@ describe NotesController do
       end
     end
 
-    context "when non-editing user is logged in" do
+    context "when user is logged in" do
       before do
         login_user_roo
       end
@@ -158,7 +208,7 @@ describe NotesController do
       end
     end
 
-    context "when editing user is logged in" do
+    context "when admin user is logged in" do
       before do
         login_user_joshua
       end
@@ -189,7 +239,18 @@ describe NotesController do
       end
     end
 
-    context "when a user is logged in" do
+    context "when user is logged in" do
+      before do
+        login_user_roo
+      end
+
+      it "returns 401" do
+        post '/notes', { text: "A new note", recipient_id: User.last.id, creator_id: User.first.id }.to_json
+        expect(last_response.status).to eq(401)
+      end
+    end
+
+    context "when admin user is logged in" do
       before do
         login_user_joshua
       end
@@ -225,7 +286,7 @@ describe NotesController do
       end
     end
 
-    context "when non-editing user is logged in" do
+    context "when user is logged in" do
       before do
         login_user_roo
       end
@@ -236,7 +297,7 @@ describe NotesController do
       end
     end
 
-    context "when editing user is logged in" do
+    context "when admin user is logged in" do
       before do
         login_user_joshua
       end

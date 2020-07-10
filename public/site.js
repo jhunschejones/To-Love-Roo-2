@@ -1,7 +1,7 @@
 var app = new Vue({
   el: '#app',
   data: {
-    note: {text: ""},
+    note: {text: "", order: null},
     newNote: "",
     sender: ""
   },
@@ -22,7 +22,7 @@ var app = new Vue({
         app.note = data;
       })
     },
-    getNote: async function() {
+    newestNote: async function() {
       fetch("/notes?query=latest").then(async function(data) {
         data = await data.json();
         app.note = data;
@@ -30,6 +30,15 @@ var app = new Vue({
     },
     previousNote: async function() {
       fetch(`/notes/${this.note.id}/previous`).then(async function(data) {
+        data = await data.json();
+        if (data.error && data.error.message === "There are no more notes.") {
+          return false;
+        }
+        app.note = data;
+      })
+    },
+    nextNote: async function() {
+      fetch(`/notes/${this.note.id}/next`).then(async function(data) {
         data = await data.json();
         if (data.error && data.error.message === "There are no more notes.") {
           return false;
@@ -63,6 +72,6 @@ var app = new Vue({
     },
   },
   beforeMount(){
-    this.getNote();
+    this.newestNote();
   },
 });

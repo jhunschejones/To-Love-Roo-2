@@ -7,12 +7,11 @@ class NotesController < ApplicationController
 
   # Get the home page
   get '/' do
-    @current_user = User.find(session[:user_id])
     @other_user = @current_user.other_user
     erb :home
   end
 
-  # Get all notes as JSON
+  # Get notes as JSON
   get '/notes' do
     content_type :json
     if params["query"] == "latest"
@@ -24,11 +23,21 @@ class NotesController < ApplicationController
     end
   end
 
-  # Get the note before a specific note ID
+  # Get the note created before a specific note
   get '/notes/:id/previous' do
-    note = Note.previous(params[:id])
-
     content_type :json
+    note = Note.previous(params[:id])
+    if note
+      NoteSerializer.new(note).as_json
+    else
+      { error: { message: "There are no more notes." } }.to_json
+    end
+  end
+
+  # Get the note created after a specific note
+  get '/notes/:id/next' do
+    content_type :json
+    note = Note.next(params[:id])
     if note
       NoteSerializer.new(note).as_json
     else
@@ -38,7 +47,6 @@ class NotesController < ApplicationController
 
   # Get the edit notes page
   get '/notes/:id/edit' do
-    @current_user = User.find(session[:user_id])
     @note = Note.find(params[:id])
     return redirect '/' unless @note.creator_id.to_s == @current_user.id.to_s
     erb :edit
@@ -48,6 +56,7 @@ class NotesController < ApplicationController
 
   # Create a new note
   post '/notes' do
+    halt 401 unless @current_user.is_joshua?
     request.body.rewind
     request_payload = JSON.parse(request.body.read, symbolize_names: true)
     halt 400 if request_payload[:text].length == 0
@@ -65,7 +74,6 @@ class NotesController < ApplicationController
   # Update a note
   post '/notes/:id' do
     @note = Note.find(params[:id])
-    @current_user = User.find(session[:user_id])
     halt 401 if @note.creator_id.to_s != @current_user.id.to_s
     halt 400 if params[:text].length == 0
 

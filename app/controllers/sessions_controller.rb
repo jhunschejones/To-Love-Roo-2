@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
 
   # Get the login page
   get '/sessions/login' do
-    if session[:user_id]
+    if User.find_by(id: session[:user_id]).present?
       redirect '/'
     else
       @flash = { alert: ALERTS[params[:alert]] }

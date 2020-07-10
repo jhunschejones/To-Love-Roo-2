@@ -10,7 +10,7 @@
   <body>
     <section class="section">
       <div id="app" class="container">
-        <button class="is-pulled-right button is-danger is-small" v-on:click="logOut">Logout</button>
+        <button class="is-pulled-right button is-danger is-small is-outlined" v-on:click="logOut">Logout</button>
 
         <h1 class="title">
           To Love Roo : Home
@@ -31,15 +31,35 @@
           </article>
 
           <div id="note-controls" class="text-secondary">
-            <span v-if="(!note.order || note.order > 0)" v-on:click="previousNote" class="tag is-warning">Previous</span>
-            <span v-on:click="randomNote" class="tag is-warning">Random</span>
-            <span v-on:click="getNote" class="tag is-warning">Newest</span>
+            <template v-if="note.order === 'first'">
+              <button v-on:click="previousNote" class="note-control-button button is-small is-warning" disabled>Previous</button>
+            </template>
+            <template v-else>
+              <button v-on:click="previousNote" class="note-control-button button is-small is-warning">Previous</button>
+            </template>
+
+            <template v-if="note.order === 'last'">
+              <button v-on:click="nextNote" class="note-control-button button is-small is-warning" disabled>Next</button>
+            </template>
+            <template v-else>
+              <button v-on:click="nextNote" class="note-control-button button is-small is-warning">Next</button>
+            </template>
+
+            <template v-if="note.order === 'last'">
+              <button v-on:click="newestNote" class="note-control-button button is-small is-warning" disabled>Newest</button>
+            </template>
+            <template v-else>
+              <button v-on:click="newestNote" class="note-control-button button is-small is-warning">Newest</button>
+            </template>
+
+            <button v-on:click="randomNote" class="note-control-button button is-small is-primary">Random</button>
+
             <% if @current_user.is_joshua? %>
-              <span v-on:click="editNote" class="tag is-danger">Edit Note</span>
+              <button v-on:click="editNote" class="note-control-button button is-small is-danger">Edit Note</button>
             <% end %>
           </div>
 
-          <br/><br/><br/>
+          <br/><br/>
 
           <% if @current_user.is_joshua? && @other_user %>
             <div class="field">

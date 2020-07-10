@@ -1,8 +1,10 @@
 [v-cloak] { display: none }
 
-.tag {
+.note-control-button {
   cursor: pointer;
   user-select: none;
+  margin-right: 2px;
+  margin-bottom: 10px;
 }
 
 .notification {
