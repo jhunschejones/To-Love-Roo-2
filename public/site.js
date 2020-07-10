@@ -43,6 +43,9 @@ var app = new Vue({
         app.note = data;
       })
     },
+    editNote: function() {
+      window.location = `/notes/${this.note.id}/edit`;
+    },
     logOut: function() {
       fetch("/sessions/logout",
         {

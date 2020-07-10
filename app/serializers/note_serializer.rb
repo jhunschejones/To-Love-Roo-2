@@ -11,6 +11,7 @@ class NoteSerializer
       text: note.text,
       creatorName: User.find(note.creator_id).name,
       recipientName: User.find(note.recipient_id).name,
+      createdOn: note.created_at.strftime("%m/%d/%Y")
     }
   end
 

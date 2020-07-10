@@ -32,9 +32,14 @@ def session
   last_request.env['rack.session']
 end
 
-def login_user
+def login_user_joshua
   User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["JOSHUA_EMAIL"])
   post '/sessions/login', {email: ENV["JOSHUA_EMAIL"], password: ENV["DEV_PASSWORD"]}
+end
+
+def login_user_roo
+  User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["ROO_EMAIL"])
+  post '/sessions/login', {email: ENV["ROO_EMAIL"], password: ENV["DEV_PASSWORD"]}
 end
 
 def create_one_note
@@ -52,13 +57,13 @@ def create_two_notes
   roo = User.create_with(name: "test user", password: ENV["DEV_PASSWORD"], password_confirmation: ENV["DEV_PASSWORD"]).find_or_create_by(email: ENV["ROO_EMAIL"])
   Note.create(
     text: "The first note",
-    recipient_id: joshua.id,
-    creator_id: roo.id
+    recipient_id: roo.id,
+    creator_id: joshua.id
   )
   Note.create(
     text: "The second note",
-    recipient_id: joshua.id,
-    creator_id: roo.id
+    recipient_id: roo.id,
+    creator_id: joshua.id
   )
 end
 

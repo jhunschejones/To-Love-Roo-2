@@ -9,7 +9,7 @@ describe SessionsController do
   end
 
   it "redirects home when a user is already signed in" do
-    login_user
+    login_user_joshua
     get '/sessions/login'
     expect(last_response).to be_redirect
     expect(last_response.location).to eq("#{test_url}/")
@@ -38,7 +38,7 @@ describe SessionsController do
 
     context "with valid credentials" do
       before do
-        login_user
+        login_user_joshua
       end
 
       it "logs in the user" do
@@ -54,7 +54,7 @@ describe SessionsController do
 
   context "when logging out" do
     before do
-      login_user
+      login_user_joshua
       delete '/sessions/logout'
     end
     it "logs out the user" do

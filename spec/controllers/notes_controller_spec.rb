@@ -14,7 +14,7 @@ describe NotesController do
 
     context "when a user is logged in" do
       before do
-        login_user
+        login_user_joshua
       end
 
       it "loads the notes page" do
@@ -35,7 +35,7 @@ describe NotesController do
 
     context "when a user is logged in" do
       before do
-        login_user
+        login_user_joshua
         create_two_notes
       end
 
@@ -98,7 +98,7 @@ describe NotesController do
 
     context "when a user is logged in" do
       before do
-        login_user
+        login_user_joshua
       end
 
       context "when there is a previous note" do
@@ -133,6 +133,49 @@ describe NotesController do
     end
   end
 
+  describe "GET /notes/:id/edit" do
+    before do
+      create_two_notes
+    end
+
+    context "when no user is logged in" do
+      it "redirects for login" do
+        get "/notes/#{Note.last.id}/edit"
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/sessions/login")
+      end
+    end
+
+    context "when non-editing user is logged in" do
+      before do
+        login_user_roo
+      end
+
+      it "redirects to home page" do
+        get "/notes/#{Note.last.id}/edit"
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/")
+      end
+    end
+
+    context "when editing user is logged in" do
+      before do
+        login_user_joshua
+      end
+
+      it "loads the edit page for the note" do
+        get "/notes/#{Note.last.id}/edit"
+        expect(last_response).to be_ok
+      end
+
+      it "redirects to home page if note does not exist" do
+        get "/notes/#{Note.last.id + 1}/edit"
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/")
+      end
+    end
+  end
+
   describe "POST /notes" do
     before do
       create_two_users
@@ -148,7 +191,7 @@ describe NotesController do
 
     context "when a user is logged in" do
       before do
-        login_user
+        login_user_joshua
       end
 
       it "creates a note" do
@@ -165,6 +208,79 @@ describe NotesController do
       it "returns the new note" do
         post '/notes', { text: "A new note", recipient_id: User.last.id, creator_id: User.first.id }.to_json
         expect(JSON.parse(last_response.body)["text"]).to eq("The first note").or eq("A new note")
+      end
+    end
+  end
+
+  describe "POST /notes/:id" do
+    before do
+      create_two_notes
+    end
+
+    context "when no user is logged in" do
+      it "redirects for login" do
+        post "/notes/#{Note.last.id}", { text: "An updated note" }.to_json
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/sessions/login")
+      end
+    end
+
+    context "when non-editing user is logged in" do
+      before do
+        login_user_roo
+      end
+
+      it "returns 401" do
+        post "/notes/#{Note.last.id}", { text: "An updated note" }
+        expect(last_response.status).to eq(401)
+      end
+    end
+
+    context "when editing user is logged in" do
+      before do
+        login_user_joshua
+      end
+
+      it "returns 400 on empty note text" do
+        starting_note_text = Note.last.text
+        post "/notes/#{Note.last.id}", { text: "" }
+        expect(Note.last.text).to eq(starting_note_text)
+        expect(last_response.status).to eq(400)
+      end
+
+      it "updates the note with note text" do
+        post "/notes/#{Note.last.id}", { text: "An updated note" }
+        expect(Note.last.text).to eq("An updated note")
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/")
+      end
+
+      it "redirects to home page if note does not exist" do
+        post "/notes/#{Note.last.id + 1}", { text: "An updated note" }
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/")
+      end
+    end
+  end
+
+  describe "catch all route" do
+    context "when no user is logged in" do
+      it "redirects for login" do
+        get "/surprise/monsters"
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/sessions/login")
+      end
+    end
+
+    context "when a user is logged in" do
+      before do
+        login_user_joshua
+      end
+
+      it "redirects to home page for non-matching route" do
+        get "/surprise/monsters"
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq("#{test_url}/")
       end
     end
   end

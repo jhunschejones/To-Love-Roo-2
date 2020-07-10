@@ -22,7 +22,8 @@
         <div class="container-fluid">
           <article class="message is-link">
             <div class="message-header">
-              <p v-cloak>A message for {{ note.recipientName }}:</p>
+              <span v-cloak>A message for {{ note.recipientName }}:</span>
+              <span v-cloak>{{ note.createdOn }}</span>
             </div>
             <div class="message-body">
               <p v-cloak>{{ note.text }}</p>
@@ -33,6 +34,9 @@
             <span v-if="(!note.order || note.order > 0)" v-on:click="previousNote" class="tag is-warning">Previous</span>
             <span v-on:click="randomNote" class="tag is-warning">Random</span>
             <span v-on:click="getNote" class="tag is-warning">Newest</span>
+            <% if @current_user.is_joshua? %>
+              <span v-on:click="editNote" class="tag is-danger">Edit Note</span>
+            <% end %>
           </div>
 
           <br/><br/><br/>

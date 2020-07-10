@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
 
   ALERTS = { 'auth' => 'Username or password was incorrect' }
 
+  # Get the login page
   get '/sessions/login' do
     if session[:user_id]
       redirect '/'
@@ -12,6 +13,7 @@ class SessionsController < ApplicationController
     end
   end
 
+  # Post a login request
   post '/sessions/login' do
     user = User.where(email: params[:email]).first
     if user && user.authenticate(params[:password])
@@ -23,6 +25,7 @@ class SessionsController < ApplicationController
     end
   end
 
+  # Log out
   delete '/sessions/logout' do
     session.clear
     redirect '/sessions/login'
