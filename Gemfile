@@ -8,6 +8,7 @@ gem "sinatra-activerecord"
 gem 'bcrypt'
 gem 'pg'
 gem 'puma'
+gem 'newrelic_rpm'
 
 group :development do
   gem 'pry'
