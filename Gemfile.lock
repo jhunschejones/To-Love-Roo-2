@@ -19,7 +19,7 @@ GEM
     database_cleaner-active_record (1.8.0)
       activerecord
       database_cleaner (~> 1.8.0)
-    diff-lcs (1.4.3)
+    diff-lcs (1.4.4)
     ffi (1.13.1)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
@@ -81,7 +81,7 @@ GEM
     tilt (2.0.10)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
