@@ -8,6 +8,7 @@ class NotesController < ApplicationController
   # Get the home page
   get '/' do
     @other_user = @current_user.other_user
+    @notes_count = Note.count
     erb :home
   end
 

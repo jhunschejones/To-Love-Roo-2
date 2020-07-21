@@ -20,6 +20,10 @@
         <div class="note-form">
           <form action="/notes/<%= @note.id %>" method="post">
             <div class="field">
+
+              <p class="created-at has-text-grey-light">
+                Originally written <%= @note.created_at.strftime("%m/%d/%Y") %>
+              </p>
               <div class="control">
                 <input class="input" type="text" name="text" value="<%= @note.text %>">
               </div>

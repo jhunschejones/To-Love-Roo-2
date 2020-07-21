@@ -1,12 +1,26 @@
 [v-cloak] { display: none }
 
+.section {
+  padding: 2.5rem 1.5rem !important;
+}
+
+.subtitle {
+  margin-bottom: 30px !important;
+  font-size: 1.2rem !important;
+}
+
 .note-control-button {
   cursor: pointer;
   user-select: none;
   margin-right: 2px;
   margin-bottom: 10px;
+  font-size: 0.8em !important;
 }
 
 .notification {
   margin-bottom: 20px;
+}
+
+.note-form .created-at {
+  margin-bottom: 10px;
 }
