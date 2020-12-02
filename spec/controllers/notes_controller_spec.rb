@@ -63,7 +63,11 @@ describe NotesController do
         end
 
         it "gets the latest note" do
-          expect(JSON.parse(last_response.body)["text"]).to eq("The second note")
+          expect(JSON.parse(last_response.body)["note"]["text"]).to eq("The second note")
+        end
+
+        it "includes total note count" do
+          expect(JSON.parse(last_response.body)["notesCount"]).to eq(Note.count)
         end
       end
 
@@ -268,7 +272,12 @@ describe NotesController do
 
       it "returns the new note" do
         post '/notes', { text: "A new note", recipient_id: User.last.id, creator_id: User.first.id }.to_json
-        expect(JSON.parse(last_response.body)["text"]).to eq("The first note").or eq("A new note")
+        expect(JSON.parse(last_response.body)["note"]["text"]).to eq("The first note").or eq("A new note")
+      end
+
+      it "returns the new note count" do
+        post '/notes', { text: "A new note", recipient_id: User.last.id, creator_id: User.first.id }.to_json
+        expect(JSON.parse(last_response.body)["notesCount"]).to eq(Note.count)
       end
     end
   end

@@ -8,7 +8,6 @@ class NotesController < ApplicationController
   # Get the home page
   get '/' do
     @other_user = @current_user.other_user
-    @notes_count = Note.count
     erb :home
   end
 
@@ -16,7 +15,10 @@ class NotesController < ApplicationController
   get '/notes' do
     content_type :json
     if params["query"] == "latest"
-      NoteSerializer.new(Note.last).as_json
+      {
+        "note" => NoteSerializer.new(Note.last).serializable_hash,
+        "notesCount" => Note.count
+      }.to_json
     elsif params["query"] == "random"
       NoteSerializer.new(Note.random).as_json
     else
@@ -57,19 +59,21 @@ class NotesController < ApplicationController
 
   # Create a new note
   post '/notes' do
+    content_type :json
     halt 401 unless @current_user.is_joshua?
     request.body.rewind
     request_payload = JSON.parse(request.body.read, symbolize_names: true)
     halt 400 if request_payload[:text].length == 0
 
-    content_type :json
-    NoteSerializer.new(
-      Note.create(
-        text: request_payload[:text],
-        creator_id: session[:user_id],
-        recipient_id: User.find(session[:user_id]).other_user.id,
-      )
-    ).as_json
+    new_note = Note.create!(
+      text: request_payload[:text],
+      creator_id: session[:user_id],
+      recipient_id: User.find(session[:user_id]).other_user.id,
+    )
+    {
+      "note" => NoteSerializer.new(new_note).serializable_hash,
+      "notesCount" => Note.count
+    }.to_json
   end
 
   # Update a note

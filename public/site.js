@@ -3,7 +3,8 @@ var app = new Vue({
   data: {
     note: {text: "", order: null},
     newNote: "",
-    sender: ""
+    sender: "",
+    notesCount: 0
   },
   methods: {
     addNote: async function() {
@@ -19,13 +20,15 @@ var app = new Vue({
       ).then(async function(data) {
         data = await data.json();
         app.newNote = "";
-        app.note = data;
+        app.note = data.note;
+        app.notesCount = data.notesCount;
       })
     },
     newestNote: async function() {
       fetch("/notes?query=latest").then(async function(data) {
         data = await data.json();
-        app.note = data;
+        app.note = data.note;
+        app.notesCount = data.notesCount;
       })
     },
     previousNote: async function() {
