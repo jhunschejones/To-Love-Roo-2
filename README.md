@@ -14,3 +14,6 @@ The original app I was re-building here makes loose use of the Vue.js framework 
 
 ## Reflections
 It's great to be more comfortable with another Ruby web framework, especially one that feels so capable of bridging the gap between a basic Rack app and a full-blown Rails app. I would definitely come back again to build in Sinatra if I encountered a domain of the right scale, and I've already taken advantage of some of the approaches I learned building this app to create some cool testing APIs at work! I'd call that a win-win in my book.
+
+## Setup
+To run the app in local development, create `/tmp/.env` which exports `JOSHUA_EMAIL`, `ROO_EMAIL`, `DEV_PASSWORD` and `KEY_SECRET` env vars. You can the build and seed the database with `. ./tmp/.env && rake db:create db:migrate db:seed`. The app then runs in local development with the `./bin/start` command. To set up the test suite you'll use the same ENV vars in `./tmp/.env` and `. ./tmp/.env && RACK_ENV=test rake db:create db:migrate`. Tests can then be run with the `./bin/test` command.
